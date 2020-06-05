@@ -40,12 +40,14 @@ public class Elevator {
 			int diffMaxToCurrLevel = Math.abs(maxLevel - currentLevel);
 					
 			try {
+				// !!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO: 
 				if (diffMinToCurrLevel > diffMaxToCurrLevel) {
 					// aktuelles Stockwerk näher an oberstes Stockwerk
 					// => fahre ins oberste gegebene Stockwerk
-					for (int level = currentLevel + 1; level < maxLevel; level++) {
+					int stepDirection = currentLevel > maxLevel ? -1 : 1;
+					while (Math.abs(currentLevel - maxLevel) > 1) {
 						Thread.sleep(1000);
-						System.out.println(String.format("%s. Etage", level));
+						System.out.println(String.format("%s. Etage", currentLevel += stepDirection));
 					}
 					// wir befinden uns ein Stockwerk unter dem höchsten gegebenen Stockwerk
 					currentLevel = maxLevel - 1;
@@ -65,9 +67,10 @@ public class Elevator {
 				} else {
 					// aktuelles Stockwerk näher an unterstes Stockwerk
 					// => fahre ins unterste gegebene Stockwerk
-					for (int level = currentLevel - 1; level > minLevel; level--) {
+					int stepDirection = currentLevel > minLevel ? -1 : 1;
+					while (Math.abs(currentLevel - minLevel) > 1) {
 						Thread.sleep(1000);
-						System.out.println(String.format("%s. Etage", level));
+						System.out.println(String.format("%s. Etage", currentLevel += stepDirection));
 					}
 					// wir befinden uns ein Stockwerk über dem untersten gegebenen Stockwerk
 					currentLevel = minLevel + 1;
