@@ -1,20 +1,28 @@
-package elevator;
+package lift;
 
 import java.util.*;
 
-public class Elevator {
+public class Lift {
+	// Variable, die immer aktuelles Stockwerk anzeigt
 	private int currentLevel = 1;
+	// Liste, die die anzufahrendes Stockwerke beinhaltet
 	private List<Integer> levelsToReach;
 	
-	public Elevator() {
+	// Konstruktor der Lift-Klasse
+	public Lift() {
+		// Initialisiert Liste der anzufahrenden Stockwerke
 		levelsToReach = new ArrayList<Integer>(); 
 	}
 	
+	// Funktion, um Stockwerk hinzuzufügen
 	public void addLevel(int level) {
+		// füge nur Stockwerke hinzu, wenn es bisher weniger als 4 sind (insgesamt maximal 4)
 		if (levelsToReach.size() < 4) {
+			// Stockwerknummer muss sich zwischen -3 und 12 befinden
 			if (level < -3 || level > 12) {
 				System.out.println("Nur Stockwerke von -3 bis 12 sind mit dem Fahrstuhl erreichbar.");
 			} else {
+				// aktuelles Stockwerk darf nicht wieder ausgewählt werden
 				if (level == currentLevel) {
 					System.out.println(String.format("Fahrstuhl befindet sich bereits im %-3s. Stockwerk.", level));
 				} else {
@@ -26,7 +34,8 @@ public class Elevator {
 		}
 	}
 	
-	public void startElevator() {
+	public void startLift() {
+		// starte Lift nur, wenn es mehr als 1 neues STockwerk gibt
 		if (levelsToReach.size() == 0) {
 			System.out.println("Kein Stockwerk angegeben. Bitte fügen Sie Stockwerke hinzu.");
 		} else {
@@ -40,11 +49,12 @@ public class Elevator {
 			int diffMaxToCurrLevel = Math.abs(maxLevel - currentLevel);
 					
 			try {
-				// !!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO: 
 				if (diffMinToCurrLevel > diffMaxToCurrLevel) {
 					// aktuelles Stockwerk näher an oberstes Stockwerk
 					// => fahre ins oberste gegebene Stockwerk
+					// bestimme dafür, ob das neue "oberste" Stockwerk ober- oder unterhalb des jetzigen liegt
 					int stepDirection = currentLevel > maxLevel ? -1 : 1;
+					// gehe solange in Richtung des neuen obersten Stockwerkes bis wir uns ein Stockwerk davor befinden
 					while (Math.abs(currentLevel - maxLevel) > 1) {
 						Thread.sleep(1000);
 						System.out.println(String.format("%s. Etage", currentLevel += stepDirection));
@@ -63,11 +73,14 @@ public class Elevator {
 							System.out.println(String.format("%s. Etage", level));
 						}
 					}
+					// aktuelle Stockwerk = unterstes Stockwerk der vorherigen Fahr
 					currentLevel = minLevel;
 				} else {
-					// aktuelles Stockwerk näher an unterstes Stockwerk
+					// aktuelles Stockwerk näher an unterstem Stockwerk
 					// => fahre ins unterste gegebene Stockwerk
+					// bestimme dafür, ob das neue "unterste" Stockwerk ober- oder unterhalb des jetzigen liegt
 					int stepDirection = currentLevel > minLevel ? -1 : 1;
+					// gehe solange in Richtung des neuen untersten Stockwerkes bis wir uns ein Stockwerk davor befinden
 					while (Math.abs(currentLevel - minLevel) > 1) {
 						Thread.sleep(1000);
 						System.out.println(String.format("%s. Etage", currentLevel += stepDirection));
@@ -86,12 +99,14 @@ public class Elevator {
 							System.out.println(String.format("%s. Etage", level));
 						}
 					}
+					// aktuelle Stockwerk = oberstes Stockwerk der vorherigen Fahr
 					currentLevel = maxLevel;
 				}
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			} finally {
+				// lösche nach jeder Fahrt die bisherige Liste
 				levelsToReach.clear();
 			}
 		}
